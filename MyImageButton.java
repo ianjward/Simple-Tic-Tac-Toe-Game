@@ -3,7 +3,7 @@ import processing.core.*;
 
 public class MyImageButton extends GImageButton { 
    boolean isAvailable = true;
-   int takenBy;
+   int takenBy = 30;
    
     public MyImageButton(PApplet theApplet, float p0, float p1, float p2, float p3, String[] fnames) {
         super(theApplet, p0, p1, p2, p3, fnames, null);

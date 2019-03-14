@@ -1,13 +1,12 @@
 // Need G4P library
 import g4p_controls.*;
 import peasy.*;
+import javax.swing.JOptionPane;  
 
 public void setup(){
-  size(480, 320, JAVA2D);
+  size(480, 320, JAVA2D);//480x320 original
   createGUI();
-  customGUI();
   newGame();
-  
 }
 
 protected void newGame(){
@@ -17,6 +16,7 @@ protected void newGame(){
      allButtons[i].takenBy = 30; 
      allButtons[i].setImage(new String[] { "blank.png", "blank.png", "blank.png" });
   }
+  gameOver = false;
   double randomDouble = Math.random();  //set x or o for user
   if(randomDouble > .5){
     userIcon = 'x';
@@ -25,11 +25,9 @@ protected void newGame(){
     userIcon = 'o';
     aiIcon = 'x';
   }
-
   movesCompleted = 0;
-  //reset all image button isavailable booleans
-  //wipe board icons
-  //wipe any other tracked variables
+  userWon = false;
+  aiWon = false;
 }
 
 public void draw(){
@@ -39,7 +37,7 @@ public void draw(){
 }
 
 private void drawGrid(){
-  PShape cross1, cross2, vertCross1, vertCross2;
+    PShape cross1, cross2, vertCross1, vertCross2;
   
    cross1 = createShape(RECT,0,120,width,10);
    cross1.setFill(color(0,0,0,0));
@@ -59,8 +57,14 @@ private void drawGrid(){
   shape(vertCross2);
 }
 
-// Use this method to add additional statements
-// to customise the GUI controls
-public void customGUI(){
-
+public void popUp(String message){
+  JOptionPane pane = new JOptionPane();
+  int choice = pane.showConfirmDialog(null,message, message, JOptionPane.YES_NO_OPTION);
+  if(choice == 0){
+    newGame();
+  }else{
+      lockSquares();
+      userWon = false;
+      aiWon = false;
+  }
 }
