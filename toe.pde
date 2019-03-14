@@ -1,7 +1,5 @@
 // Need G4P library
 import g4p_controls.*;
-// You can remove the PeasyCam import if you are not using
-// the GViewPeasyCam control or the PeasyCam library.
 import peasy.*;
 
 
@@ -9,10 +7,25 @@ public void setup(){
   size(480, 320, JAVA2D);
   createGUI();
   customGUI();
-  // Place your setup code here
+  newGame();
   
 }
 
+protected void newGame(){
+  //need to resize icons so they fit perfectly
+  
+  double randomDouble = Math.random();  //set x or o for user
+  if(randomDouble > .5){
+    userIsX = true;
+  }else{
+    userIsX = false;
+  }
+  
+  movesCompleted = 0;
+  //reset all image button isavailable booleans
+  //wipe board icons
+  //wipe any other tracked variables
+}
 public void draw(){
   color c = color(255,255,255);
   background(c, 230);
