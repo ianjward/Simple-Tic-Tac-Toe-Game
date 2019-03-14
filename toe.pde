@@ -2,7 +2,6 @@
 import g4p_controls.*;
 import peasy.*;
 
-
 public void setup(){
   size(480, 320, JAVA2D);
   createGUI();
@@ -13,19 +12,26 @@ public void setup(){
 
 protected void newGame(){
   //need to resize icons so they fit perfectly
-  
+  for(int i = 0; i < 9; i++){
+     allButtons[i].isAvailable = true;
+     allButtons[i].takenBy = 30; 
+     allButtons[i].setImage(new String[] { "blank.png", "blank.png", "blank.png" });
+  }
   double randomDouble = Math.random();  //set x or o for user
   if(randomDouble > .5){
-    userIsX = true;
+    userIcon = 'x';
+    aiIcon = 'o';
   }else{
-    userIsX = false;
+    userIcon = 'o';
+    aiIcon = 'x';
   }
-  
+
   movesCompleted = 0;
   //reset all image button isavailable booleans
   //wipe board icons
   //wipe any other tracked variables
 }
+
 public void draw(){
   color c = color(255,255,255);
   background(c, 230);

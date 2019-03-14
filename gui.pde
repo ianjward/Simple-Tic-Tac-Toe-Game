@@ -1,82 +1,60 @@
-/* =========================================================
- * ====                   WARNING                        ===
- * =========================================================
- * The code in this tab has been generated from the GUI form
- * designer and care should be taken when editing this file.
- * Only add/edit code inside the event handlers i.e. only
- * use lines between the matching comment tags. e.g.
+/*TODO - need to add draw at end
+        - freeze game after it is over
+*/
+ public void Menuclick(GPanel source, GEvent event) { //_CODE_:Menu:303702:
+  println("Menu - GPanel >> GEvent." + event + " @ " + millis());
+} //_CODE_:Menu:303702:
 
- void myBtnEvents(GButton button) { //_CODE_:button1:12356:
-     // It is safe to enter your event code here  
- } //_CODE_:button1:12356:
+public void resetButton_click1(GButton source, GEvent event) { //_CODE_:button1:491820:
+  println("resetButton - GButton >> GEvent." + event + " @ " + millis());
+  newGame();
+  //reset the board
+} //_CODE_:button1:491820:
  
- * Do not rename this tab!
- * =========================================================
- */
-
 public void imgButton1_click1(MyImageButton source, GEvent event) { //_CODE_:imgButton1:581601:
   println("imgButton1 - MyImageButton >> GEvent." + event + " @ " + millis());
-  checkMove(imgButton1);
+  checkMove(imgButton1, 1);
 } //_CODE_:imgButton1:581601:
 
 public void imgButton2_click1(MyImageButton source, GEvent event) { //_CODE_:imgButton2:699378:
   println("imgButton2 - MyImageButton >> GEvent." + event + " @ " + millis());
-   checkMove(imgButton2);
-  imgButton2.setImage(new String[] {"o.png","o.png","o.png"});
+   checkMove(imgButton2, 1);
 } //_CODE_:imgButton2:699378:
 
 public void imgButton3_click1(MyImageButton source, GEvent event) { //_CODE_:imgButton3:279131:
   println("imgButton3 - MyImageButton >> GEvent." + event + " @ " + millis());
-   checkMove(imgButton3);
-  imgButton3.setImage(new String[] {"o.png","o.png","o.png"});
+   checkMove(imgButton3, 1);
 } //_CODE_:imgButton3:279131:
-
-public void Menuclick(GPanel source, GEvent event) { //_CODE_:Menu:303702:
-  println("Menu - GPanel >> GEvent." + event + " @ " + millis());
-} //_CODE_:Menu:303702:
-
-public void button1_click1(GButton source, GEvent event) { //_CODE_:button1:491820:
-  println("button1 - GButton >> GEvent." + event + " @ " + millis());
-  newGame();
-  //reset the board
-} //_CODE_:button1:491820:
 
 public void imgButton4_click1(MyImageButton source, GEvent event) { //_CODE_:imgButton4:994874:
   println("imgButton4 - MyImageButton >> GEvent." + event + " @ " + millis());
-   checkMove(imgButton4);
-  imgButton4.setImage(new String[] {"o.png","o.png","o.png"});
+   checkMove(imgButton4, 1);
 } //_CODE_:imgButton4:994874:
 
 public void imgButton5_click1(MyImageButton source, GEvent event) { //_CODE_:imgButton5:471892:
   println("imgButton5 - MyImageButton >> GEvent." + event + " @ " + millis());
-   checkMove(imgButton5);
-  imgButton5.setImage(new String[] {"o.png","o.png","o.png"});
+   checkMove(imgButton5, 1);
 } //_CODE_:imgButton5:471892:
 
 public void imgButton6_click1(MyImageButton source, GEvent event) { //_CODE_:imgButton6:368319:
   println("imgButton6 - MyImageButton >> GEvent." + event + " @ " + millis());
-   checkMove(imgButton6);
-  imgButton6.setImage(new String[] {"o.png","o.png","o.png"});
+   checkMove(imgButton6, 1);
 } //_CODE_:imgButton6:368319:
 
 public void imgButton7_click1(MyImageButton source, GEvent event) { //_CODE_:imgButton6:368319:
   println("imgButton7 - MyImageButton >> GEvent." + event + " @ " + millis());
-  checkMove(imgButton7);
-  imgButton7.setImage(new String[] {"o.png","o.png","o.png"});
+  checkMove(imgButton7, 1);
 } //_CODE_:imgButton6:368319:
 
 public void imgButton8_click1(MyImageButton source, GEvent event) { //_CODE_:imgButton6:368319:
   println("imgButton8 - MyImageButton >> GEvent." + event + " @ " + millis());
-  checkMove(imgButton8);
-  imgButton8.setImage(new String[] {"o.png","o.png","o.png"});
+  checkMove(imgButton8, 1);
 } //_CODE_:imgButton6:368319:
 
 public void imgButton9_click1(MyImageButton source, GEvent event) { //_CODE_:imgButton6:368319:
   println("imgButton9 - MyImageButton >> GEvent." + event + " @ " + millis());
-   checkMove(imgButton9);
-  imgButton9.setImage(new String[] {"o.png","o.png","o.png"});
+   checkMove(imgButton9, 1);
 } //_CODE_:imgButton6:368319:
-
 
 
 // Create all the GUI controls. 
@@ -90,68 +68,135 @@ public void createGUI(){
   Menu = new GPanel(this, 0, 0, 480, 16, "");
   Menu.setOpaque(true);
   Menu.addEventHandler(this, "Menuclick");
-  button1 = new GButton(this, 400, 0, 80, 16);
-  button1.setText("Restart");
-  button1.setLocalColorScheme(GCScheme.GOLD_SCHEME);
-  button1.addEventHandler(this, "button1_click1");
-  Menu.addControl(button1);
   
+  resetButton = new GButton(this, 400, 0, 80, 16);
+  resetButton.setText("Restart");
+  resetButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
+  resetButton.addEventHandler(this, "resetButton_click1");
+  Menu.addControl(resetButton);
   
+  //row1
   imgButton1 = new MyImageButton(this, 40, 24, 85, 85, new String[] { "blank.png", "blank.png", "blank.png" } );
   imgButton1.addEventHandler(this, "imgButton1_click1");
+  allButtons[0] = imgButton1;
   
   imgButton2 = new MyImageButton(this, 190, 24, 85, 85, new String[] { "blank.png", "blank.png", "blank.png" } );  
   imgButton2.addEventHandler(this, "imgButton2_click1");
+  allButtons[1] = imgButton2;
   
   imgButton3 = new MyImageButton(this, 360, 24, 85, 85, new String[] { "blank.png", "blank.png", "blank.png" } );
   imgButton3.addEventHandler(this, "imgButton3_click1");
+  allButtons[2] = imgButton3;
   
 
-  
+  //row2
   imgButton4 = new MyImageButton(this, 40, 133, 85, 85, new String[] { "blank.png", "blank.png", "blank.png" } );
   imgButton4.addEventHandler(this, "imgButton4_click1");
+  allButtons[3] = imgButton4;
   
   imgButton5 = new MyImageButton(this, 190, 133, 85, 85, new String[] { "blank.png", "blank.png", "blank.png" } );
   imgButton5.addEventHandler(this, "imgButton5_click1");
+  allButtons[4] = imgButton5;
 
   imgButton6 = new MyImageButton(this, 360, 133, 85, 85, new String[] { "blank.png", "blank.png", "blank.png" } );
   imgButton6.addEventHandler(this, "imgButton6_click1");
+  allButtons[5] = imgButton6;
   
   
-  
+  //row 3
   imgButton7 = new MyImageButton(this, 40, 235, 85, 85, new String[] { "blank.png", "blank.png", "blank.png" } );
   imgButton7.addEventHandler(this, "imgButton7_click1");
+  allButtons[6] = imgButton7;
   
   imgButton8 = new MyImageButton(this, 190, 235, 85, 85, new String[] { "blank.png", "blank.png", "blank.png" } );
   imgButton8.addEventHandler(this, "imgButton8_click1");
+  allButtons[7] = imgButton8;
   
   imgButton9 = new MyImageButton(this, 360, 235, 85, 85, new String[] { "blank.png", "blank.png", "blank.png" } );
   imgButton9.addEventHandler(this, "imgButton9_click1");
+  allButtons[8] = imgButton9;
 }
 
-private void checkMove(MyImageButton square){
+private void checkMove(MyImageButton square, int caller){
   if(square.isAvailable){
-    square.setImage(new String[] {"o.png","o.png","o.png"});
+    square.setImage(choosePicture(caller));
+    square.isAvailable = false;
+    square.takenBy = caller;
     movesCompleted++;
     println("Game Moves so far:" + movesCompleted);
-    square.isAvailable = false;
-    //check for winner/loser/endgame
-    //if not endgame (9 completed moves) have AI make a move
+    checkForVictory();
+    
+    if(movesCompleted != 9 & caller == 1){
+        aiPick();
+     }
+     if(movesCompleted == 9 & !gameOver){
+        println("The game ended in a draw!"); 
+     }
+  }else if(!square.isAvailable & caller == 0){
+    aiPick();
   }else{
-    println("Square taken");
+     println("Square taken"); 
+  }
+ 
+}
+
+private void checkForVictory(){
+  int row1 = allButtons[0].takenBy + allButtons[1].takenBy + allButtons[2].takenBy;
+  int row2 = allButtons[3].takenBy + allButtons[4].takenBy + allButtons[5].takenBy; 
+  int row3 = allButtons[6].takenBy + allButtons[7].takenBy + allButtons[8].takenBy;
+  
+  int column1 = allButtons[0].takenBy + allButtons[3].takenBy + allButtons[6].takenBy;
+  int column2 = allButtons[1].takenBy + allButtons[4].takenBy + allButtons[7].takenBy;
+  int column3 = allButtons[2].takenBy + allButtons[5].takenBy + allButtons[8].takenBy;
+  
+  int topLeftDiag = allButtons[0].takenBy + allButtons[4].takenBy + allButtons[8].takenBy;
+  int botLeftDiag = allButtons[6].takenBy + allButtons[4].takenBy + allButtons[2].takenBy;
+  
+  if( row1 == 0| row2 == 0| row3 == 0| topLeftDiag == 0| botLeftDiag == 0 | column1 == 0 | column2 == 0 |column3 == 0 ){
+    println("ai won!");
+    gameOver = true;
+    new Message();
+  }
+  if( row1 == 3| row2 == 3| row3 == 3| topLeftDiag == 3| botLeftDiag == 3 | column1 == 3 | column2 == 3 | column3 == 3 ){
+    println("human won!");
+    gameOver = true;
+    new Message();
+  }
+}
+
+public void aiPick(){
+  int randomSquare = (int) Math.floor(Math.random() * 9); 
+  println("in ai" + randomSquare);
+  checkMove(allButtons[randomSquare], 0);
+}
+
+//int aiPick == 0 means this method was called by the ai
+protected String[] choosePicture(int aiPick){
+  if(userIcon == 'x' & aiPick == 0){
+     return new String[] {"o.png","o.png","o.png"};
+  }else if(userIcon == 'x' & aiPick == 1){
+     return new String[] {"x.png","x.png","x.png"};
+  }else if(userIcon == 'o' & aiPick == 0){
+    return new String[] {"x.png","x.png","x.png"};
+  }else{
+    return new String[] {"o.png","o.png","o.png"};
   }
 }
 
 // Variable declarations 
 // autogenerated do not edit
-boolean userIsX;
+boolean gameOver = false;
+String oPicture = "o.png";
+String xPicture = "x.png";
+char userIcon;
+char aiIcon;
 int movesCompleted = 0;
-MyImageButton[] squares = new MyImageButton[9];
+MyImageButton[] allButtons = new MyImageButton[9];
 MyImageButton imgButton1; 
 MyImageButton imgButton2; 
 MyImageButton imgButton3; 
 GPanel Menu; 
-GButton button1; 
+GButton resetButton; 
 MyImageButton imgButton4; 
 MyImageButton imgButton5; 
 MyImageButton imgButton6; 
