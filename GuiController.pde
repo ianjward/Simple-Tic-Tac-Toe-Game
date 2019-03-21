@@ -80,6 +80,9 @@ protected void newGame(){
     userIcon = 'o';
     aiIcon = 'x';
   }
+  if(userIcon == 'o'){
+     aiPick(); 
+  }
 }
 
 private void checkMove(Square square, boolean userSelectedMove){
@@ -101,12 +104,12 @@ private void checkMove(Square square, boolean userSelectedMove){
    }
   else if(userWon){
       Menu.setLocalColorScheme(GCScheme.GREEN_SCHEME);
-      userMessage = "You won, click restart to play again!"; 
+      userMessage = "You won in " + movesCompleted + " moves, click restart to play again!"; 
       lockSquares();
    }
   else if(aiWon){
       Menu.setLocalColorScheme(GCScheme.RED_SCHEME);
-      userMessage = "You lost, click restart to play again!"; 
+      userMessage = "You are garbage and lost in " + movesCompleted + " moves, click restart to play again!"; 
       lockSquares();
   }
   else if(userSelectedMove && aValidSquareWasPicked){
