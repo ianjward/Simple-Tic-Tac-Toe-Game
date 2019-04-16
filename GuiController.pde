@@ -62,14 +62,7 @@ protected void newGame(){
   userWon = false;
   aiWon = false;
   endedInDraw = false;
-  
-  //reset all squares
-  for(int i = 0; i < 9; i++){
-     allSquares[i].isAvailable = true;
-     allSquares[i].takenBy = 30; 
-     allSquares[i].setImage(new String[] { "blank.png", "blank.png", "blank.png" });
-  }
-  
+   
   //pick whether user is X or O
   double randomDouble = Math.random();  
   if(randomDouble > .5){
@@ -80,6 +73,14 @@ protected void newGame(){
     userIcon = 'o';
     aiIcon = 'x';
   }
+  
+  //reset all squares
+  for(int i = 0; i < 9; i++){
+     allSquares[i].isAvailable = true;
+     allSquares[i].takenBy = 30; 
+     allSquares[i].setImage(new String[] { "blank.png", "gray" + userIcon + ".png", "blank.png" });
+  }
+  
   if(userIcon == 'o'){
      aiPick(); 
   }
