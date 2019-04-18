@@ -1,10 +1,9 @@
 /**
   The Gui is responsible for generating the initial blank squares and creating action listeners for each square.
 **/
-
-GPanel Menu; 
+GPanel Menu; //A container for the reset button
 GButton resetButton; 
-Square imgButton1; 
+Square imgButton1; //one imageButton for each clickable square
 Square imgButton2; 
 Square imgButton3; 
 Square imgButton4; 
@@ -14,6 +13,7 @@ Square imgButton7;
 Square imgButton8;
 Square imgButton9; 
 
+//initial build of the game board
 protected void createGUI(){
   drawGrid();
   G4P.messagesEnabled(false);
@@ -21,18 +21,20 @@ protected void createGUI(){
   G4P.setMouseOverEnabled(false);
   surface.setTitle("Sketch Window");
 
+  //create purple menu
   Menu = new GPanel(this, 0, 0, 480, 16, "");
   Menu.setOpaque(true);
   Menu.setDraggable(false);
   Menu.addEventHandler(this, "Menuclick");
   
+  //create reset button
   resetButton = new GButton(this, 301, 0, 80, 16);
   resetButton.setText("Restart");
   resetButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   resetButton.addEventHandler(this, "resetButton_click1");
   Menu.addControl(resetButton);
   
- //row1
+  // create row1
   imgButton1 = new Square(this, 0, 16, 120, 90, new String[] { "blank.png", "blank.png", "blank.png" } );
   imgButton1.addEventHandler(this, "imgButton1_click1");
   allSquares[0] = imgButton1;
@@ -46,7 +48,7 @@ protected void createGUI(){
   allSquares[2] = imgButton3;
   
 
-  //row2
+  //create row2
   imgButton4 = new Square(this, 0, 119, 120, 90, new String[] { "blank.png", "blank.png", "blank.png" } );
   imgButton4.addEventHandler(this, "imgButton4_click1");
   allSquares[3] = imgButton4;
@@ -60,7 +62,7 @@ protected void createGUI(){
   allSquares[5] = imgButton6;
   
   
-  //row 3
+  //create row 3
   imgButton7 = new Square(this, 0, 221, 120, 90, new String[] { "blank.png", "blank.png", "blank.png" } );
   imgButton7.addEventHandler(this, "imgButton7_click1");
   allSquares[6] = imgButton7;
@@ -74,30 +76,32 @@ protected void createGUI(){
   allSquares[8] = imgButton9;
 }
 
-
+//draws the lines that seperate the board into 9 sections
 private void drawGrid(){
    color c = color(255,255,255);
    background(c, 230);
    PShape cross1, cross2, vertCross1, vertCross2;
   
-   cross1 = createShape(RECT,0,107,width,10);
+   cross1 = createShape(RECT,0,107,width,10); //top horizontal 
    cross1.setFill(color(0,0,0,0));
    
-   cross2 = createShape(RECT,0,209,width,10);
+   cross2 = createShape(RECT,0,209,width,10); //bottom horizontal
    cross2.setFill(color(0,0,0,0));
    
-   vertCross1 = createShape(RECT,120,0,10,height);
+   vertCross1 = createShape(RECT,120,0,10,height); //left vertical
    vertCross1.setFill(color(0,0,0,0));
    
-   vertCross2 = createShape(RECT,251,0,10,height);
+   vertCross2 = createShape(RECT,251,0,10,height); //right vertical
    vertCross2.setFill(color(0,0,0,0));
    
+   //actually draws the shapes on the board
    shape(cross1);
    shape(cross2);
    shape(vertCross1);
    shape(vertCross2);
 }
 
+//add all the listeners to the buttons
 public void Menuclick(GPanel source, GEvent event) { 
 } 
 
