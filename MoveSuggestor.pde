@@ -76,8 +76,10 @@ protected int suggestAiMove(){
       return indexLookup.get(checkForTwoInARow('H'));
   }
   //insert check for fork
-  
-  //insert check for fork block
+  if(checkForFork() != -1){
+    println("AI created a fork");
+   return checkForFork(); 
+  }
   
   //check for center
   if(squareValues[4] == 'A'){
@@ -173,6 +175,24 @@ private String checkIfOpponentInCorner(char opponent, char player){
     } 
   }
   return null;
+}
+
+private int checkForFork(){
+  for(int i = 6; i < 8; i++){
+    if(currentMoves[i].equals("CCH") & squareValues[1] == 'H'){
+      return 3;
+    }
+    if(currentMoves[i].equals("CCH") & squareValues[3] == 'H'){
+      return 1;
+    }
+    if(currentMoves[i].equals("HCC") & squareValues[5] == 'H'){
+      return 7;
+    }
+    if(currentMoves[i].equals("HCC") & squareValues[7] == 'H'){
+      return 5;
+    }
+  }
+  return -1;
 }
 
 protected void initializeSuggestions(){
