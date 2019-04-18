@@ -23,6 +23,7 @@ protected void createGUI(){
 
   Menu = new GPanel(this, 0, 0, 480, 16, "");
   Menu.setOpaque(true);
+  Menu.setDraggable(false);
   Menu.addEventHandler(this, "Menuclick");
   
   resetButton = new GButton(this, 301, 0, 80, 16);
