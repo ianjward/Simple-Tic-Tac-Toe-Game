@@ -1,57 +1,63 @@
-private String[] currentMoves = new String[8];
-private char[] squareValues = new char[9];
-private HashMap<String,Integer> indexLookup = new HashMap<String,Integer>();
+/**
+  The MoveSuggestor is responsible for looking at the current game board and picking the optimal move.
+**/
+private String[] currentMoves = new String[8]; //each index represents a row/column/diagonal state on the board 
+// ex: if index 0 is "HAC" the top row is  Human | Available | Computer
+private char[] squareValues = new char[9]; //an H,C or A for each board position
+private HashMap<String,Integer> indexLookup = new HashMap<String,Integer>(); // a map for converting row/column/diagonal indices to 
+// a board position 
 
+
+//returns the index of the best human move
 protected int suggestMove(){
-  int suggestion = -1;
-  currentMoves = new String[8]; //each index is a row,column or diagonal
-  squareValues = new char[9]; //each state a square is in
-  getCurrentMovesOnBoard(); //convert square takenby integers from 30,0,1 to H,A,C H=human,c+computer,A=available
-  setRows(); 
+  int suggestion = -1;//the index of a suggested move
+  currentMoves = new String[8]; //reset rows/columns/diagonals
+  squareValues = new char[9]; //reset board positions
+  getCurrentMovesOnBoard(); //update board positions
+  setRows(); //update rows/columns/diagonals
+  
   //check for 2 in a row
   if(indexLookup.get(checkForTwoInARow('H')) != null){
       println("you have 2 in a row");
       return indexLookup.get(checkForTwoInARow('H'));
   }
+  
   //check for opponent 2 in a row
   if(indexLookup.get(checkForTwoInARow('C')) != null){
       println("opponent 2 in a row");
       return indexLookup.get(checkForTwoInARow('C'));
   }
-  //insert check for fork
-  
-  //insert check for fork block
   
   //check for center
   if(squareValues[4] == 'A'){
     println("center open");
      return 4;
   }
+  
   //check for oponent in corner
-   if(indexLookup.get(checkIfOpponentInCorner('C', 'H')) != null){
+  if(indexLookup.get(checkIfOpponentInCorner('C', 'H')) != null){
        println("pick the opposite corner");
       return indexLookup.get(checkIfOpponentInCorner('C', 'H'));
   }
-  
   //select corner
-    
-    if(squareValues[0] == 'A'){
+  if(squareValues[0] == 'A'){
     println("corner open");
      return 0;
-    }
-    if(squareValues[2] == 'A'){
+  }
+  if(squareValues[2] == 'A'){
     println("corner open");
-     return 2;
-    }
-    if(squareValues[6] == 'A'){
+    return 2;
+  }
+  if(squareValues[6] == 'A'){
     println("corner open");
-     return 6;
-    }
-    if(squareValues[8] == 'A'){
+    return 6;
+  }
+  if(squareValues[8] == 'A'){
     println("corner open");
-     return 8;
-    }
+    return 8;
+  }
     
+  //return random available square  
   suggestion = (int) Math.floor(Math.random()*8);
   while(!allSquares[suggestion].getAvailability()){
      suggestion = (int) Math.floor(Math.random()*8);
@@ -59,58 +65,54 @@ protected int suggestMove(){
   return suggestion;
 }
 
+//suggests the best move for AI
 protected int suggestAiMove(){
-   int suggestion = -1;
-  currentMoves = new String[8]; //each index is a row,column or diagonal
-  squareValues = new char[9]; //each state a square is in
-  getCurrentMovesOnBoard(); //convert square takenby integers from 30,0,1 to H,A,C H=human,c+computer,A=available
-  setRows(); 
+  int suggestion = -1;//the index of a suggested move
+  currentMoves = new String[8]; //reset rows/columns/diagonals
+  squareValues = new char[9]; //reset board positions
+  getCurrentMovesOnBoard(); //update board positions
+  setRows(); //update rows/columns/diagonals
+  
   //check for 2 in a row
   if(indexLookup.get(checkForTwoInARow('C')) != null){
-      println("you have 2 in a row");
       return indexLookup.get(checkForTwoInARow('C'));
   }
+  
   //check for opponent 2 in a row
   if(indexLookup.get(checkForTwoInARow('H')) != null){
-      println("opponent 2 in a row");
       return indexLookup.get(checkForTwoInARow('H'));
   }
-  //insert check for fork
+  
+  //check for fork
   if(checkForFork() != -1){
-    println("AI created a fork");
-   return checkForFork(); 
+     return checkForFork(); 
   }
   
   //check for center
   if(squareValues[4] == 'A'){
-    println("center open");
      return 4;
   }
+  
   //check for oponent in corner
    if(indexLookup.get(checkIfOpponentInCorner('H', 'C')) != null){
-       println("pick the opposite corner");
       return indexLookup.get(checkIfOpponentInCorner('H', 'C'));
   }
   
   //select corner
-    
-    if(squareValues[0] == 'A'){
-    println("corner open");
+  if(squareValues[0] == 'A'){
      return 0;
-    }
-    if(squareValues[2] == 'A'){
-    println("corner open");
+  }
+  if(squareValues[2] == 'A'){
      return 2;
-    }
-    if(squareValues[6] == 'A'){
-    println("corner open");
+  }
+  if(squareValues[6] == 'A'){
      return 6;
-    }
-    if(squareValues[8] == 'A'){
-    println("corner open");
+  }
+  if(squareValues[8] == 'A'){
      return 8;
-    }
+  }
     
+  //suggest random available square  
   suggestion = (int) Math.floor(Math.random()*8);
   while(!allSquares[suggestion].getAvailability()){
      suggestion = (int) Math.floor(Math.random()*8);
@@ -118,9 +120,9 @@ protected int suggestAiMove(){
   return suggestion;
 }
 
+//fill squareValues[] with 'H' 'C' or 'A' based on current board status
 private void getCurrentMovesOnBoard(){
   for(int i = 0; i < 9;i++){
-    //A = available square, C=computer owned square, H=human owned square
     if(allSquares[i].getTakenBy() == 30){
       squareValues[i] = 'A';
     }else if(allSquares[i].getTakenBy() == 0){
@@ -131,6 +133,7 @@ private void getCurrentMovesOnBoard(){
   }
 }
 
+//update current rows,columns,diagonals with string representations
 private void setRows(){
   //rows
   currentMoves[0] = "" + squareValues[0] + squareValues[1] + squareValues[2];
@@ -147,6 +150,10 @@ private void setRows(){
   currentMoves[7] = "" + squareValues[6] + squareValues[4] + squareValues[2]; 
 }
 
+//checks for a row/column/diagonal with two player squares and an available square
+//returns String: first char is the row/column/diagonal index and the second is the
+//index of the available square in that row, The map converts this string to a single square location.
+//returns null if no examples are found
 private String checkForTwoInARow(char player){
   for(int i = 0; i < 8; i++){
     if(currentMoves[i].equals("A"+ player + player))
@@ -159,6 +166,10 @@ private String checkForTwoInARow(char player){
    return null;
 }
 
+//checks for an opponent row/column/diagonal with two player squares and an available square
+//returns String: first char is the row/column/diagonal index and the second is the
+//index of the available square in that row, The map converts this string to a single square location.
+//returns null if no examples are found
 private String checkIfOpponentInCorner(char opponent, char player){
   for(int i = 6; i < 8; i++){
     if(currentMoves[i].equals("AA" + opponent)){
@@ -177,8 +188,10 @@ private String checkIfOpponentInCorner(char opponent, char player){
   return null;
 }
 
+// Check for potential to create any fork
+// returns the grid position for the optimal move, -1 if no fork potential
 private int checkForFork(){
-  for(int i = 6; i < 8; i++){
+  for(int i = 6; i < 8; i++){ //6+7 are the diagonals (only possible forks given the computers intelligence)
     if(currentMoves[i].equals("CCH") & squareValues[1] == 'H'){
       return 3;
     }
@@ -195,7 +208,13 @@ private int checkForFork(){
   return -1;
 }
 
-protected void initializeSuggestions(){
+//maps row, column and diagonals to square grid locations ex:
+//"00" the first 0 stands for the first row, the second 0 is the 0th element in the first row: 
+//    maps to 0 (top left square) --------------------------------------------------------------------> 0 | 1 | 2
+//"12" second row, index 2 --> 5                                                                        3 | 4 | 5
+//"31" first column, index 1 --> 3                                                                      6 | 7 | 8
+//"72" diagonal starting at top left corner, index 2 --> 8                                                                                      
+protected void initializeSuggestions(){          
   indexLookup.put("00",0);
   indexLookup.put("01",1);
   indexLookup.put("02",2); 
