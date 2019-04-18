@@ -1,27 +1,31 @@
-
+/**
+  The BoardData tracks the state of the game currently in progress.
+**/
 protected boolean gameOver = false, userWon = false, aiWon = false, endedInDraw = false;
 protected int movesCompleted = 0;
-protected char userIcon;
+protected char userIcon; //an X or O
 protected char aiIcon;
-Square[] allSquares = new Square[9];
-int row1;
-int row2;
-int row3;
-int column1;
-int column2;
-int column3;
-int topLeftDiag;
-int botLeftDiag;
+//the sum of all the markers in row/coumn/diagonal
+//a human square counts as 1, AI = 0, available = 30
+private int row1; 
+private int row2;
+private int row3;
+private int column1;
+private int column2;
+private int column3;
+private int topLeftDiag;
+private int botLeftDiag;
+Square[] allSquares = new Square[9]; //current state of squares on the board
 
-
+//wipes the board clean
 protected void newBoard(){
   gameOver = false;
   userWon = false;
   aiWon = false;
   endedInDraw = false;
   movesCompleted = 0;
-  //pick whether user is X or O
-  double randomDouble = Math.random();  
+ 
+  double randomDouble = Math.random();   //pick whether user is X or O
   if(randomDouble > .5){
       userIcon = 'x';
       aiIcon = 'o';
@@ -30,19 +34,21 @@ protected void newBoard(){
      userIcon = 'o';
      aiIcon = 'x';
   }
- //reset all squares
- for(int i = 0; i < 9; i++){
+  
+  for(int i = 0; i < 9; i++){  //reset all squares
      allSquares[i].setAvailable(true);
      allSquares[i].setTakenBy(30); 
      allSquares[i].setImage(new String[] { "blank.png", userIcon + ".png", "blank.png" });
   }
   
- if(userIcon == 'o'){
+  if(userIcon == 'o'){ //make sure X always starts
      aiPick(); 
   }
 }
 
+//checks if game is over
 protected void checkForVictory(){
+  //sum the rows columns and diagonals
   row1 = allSquares[0].getTakenBy() + allSquares[1].getTakenBy() + allSquares[2].getTakenBy();
   row2 = allSquares[3].getTakenBy() + allSquares[4].getTakenBy() + allSquares[5].getTakenBy(); 
   row3 = allSquares[6].getTakenBy() + allSquares[7].getTakenBy() + allSquares[8].getTakenBy();
@@ -54,11 +60,13 @@ protected void checkForVictory(){
   topLeftDiag = allSquares[0].getTakenBy() + allSquares[4].getTakenBy() + allSquares[8].getTakenBy();
   botLeftDiag = allSquares[6].getTakenBy() + allSquares[4].getTakenBy() + allSquares[2].getTakenBy();
   
+  //check for AI victory
   if( row1 == 0| row2 == 0| row3 == 0| topLeftDiag == 0| botLeftDiag == 0 | column1 == 0 | column2 == 0 |column3 == 0 ){
     gameOver = true;
     lockSquares();
     aiWon = true;
  }
+  //Check for human victory
   if( row1 == 3| row2 == 3| row3 == 3| topLeftDiag == 3| botLeftDiag == 3 | column1 == 3 | column2 == 3 | column3 == 3 ){
     gameOver = true;
     lockSquares();
@@ -74,6 +82,7 @@ protected void lockSquares(){
    }
 }
  
+//execute an AI turn 
 public void aiPick(){
     boolean userSelectedMove = false;
     int chosenSquare = suggestAiMove();
