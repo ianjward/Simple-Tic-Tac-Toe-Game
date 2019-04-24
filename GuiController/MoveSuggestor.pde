@@ -1,4 +1,4 @@
-/** //<>//
+/**
   The MoveSuggestor is responsible for looking at the current game board and picking the optimal move.
 **/
 private String[] currentMoves = new String[8]; //each index represents a row/column/diagonal state on the board 
@@ -86,6 +86,13 @@ protected int suggestAiMove(){
   //check for fork
   if(checkForFork() != -1){
      return checkForFork(); 
+  }
+  
+  //check for fork block
+  if(movesCompleted == 3){
+    if(checkForForkBlock() != -1){
+      return checkForForkBlock();
+    }
   }
   
   //check for center
@@ -206,6 +213,17 @@ private int checkForFork(){
     }
   }
   return -1;
+}
+
+//checks for blocking a future fork
+private int checkForForkBlock(){
+  println("here");
+  for(int i = 6; i < 8; i++){ //6+7 are the diagonals 
+    if(currentMoves[i].equals("HCH")){
+      return 1;
+    }
+  }
+   return -1;
 }
 
 //maps row, column and diagonals to square grid locations ex:
