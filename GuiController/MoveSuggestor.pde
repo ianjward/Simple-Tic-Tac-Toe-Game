@@ -18,42 +18,34 @@ protected int suggestMove(){
   
   //check for 2 in a row
   if(indexLookup.get(checkForTwoInARow('H')) != null){
-      println("you have 2 in a row");
       return indexLookup.get(checkForTwoInARow('H'));
   }
   
   //check for opponent 2 in a row
   if(indexLookup.get(checkForTwoInARow('C')) != null){
-      println("opponent 2 in a row");
       return indexLookup.get(checkForTwoInARow('C'));
   }
   
   //check for center
   if(squareValues[4] == 'A'){
-    println("center open");
      return 4;
   }
   
   //check for oponent in corner
   if(indexLookup.get(checkIfOpponentInCorner('C', 'H')) != null){
-       println("pick the opposite corner");
       return indexLookup.get(checkIfOpponentInCorner('C', 'H'));
   }
   //select corner
   if(squareValues[0] == 'A'){
-    println("corner open");
      return 0;
   }
   if(squareValues[2] == 'A'){
-    println("corner open");
     return 2;
   }
   if(squareValues[6] == 'A'){
-    println("corner open");
     return 6;
   }
   if(squareValues[8] == 'A'){
-    println("corner open");
     return 8;
   }
     
@@ -122,7 +114,7 @@ protected int suggestAiMove(){
   //suggest random available square  
   suggestion = (int) Math.floor(Math.random()*8);
   while(!allSquares[suggestion].getAvailability()){
-     suggestion = (int) Math.floor(Math.random()*8);
+     suggestion = (int) Math.floor(Math.random()*9);
   }
   return suggestion;
 }
@@ -199,16 +191,16 @@ private String checkIfOpponentInCorner(char opponent, char player){
 // returns the grid position for the optimal move, -1 if no fork potential
 private int checkForFork(){
   for(int i = 6; i < 8; i++){ //6+7 are the diagonals (only possible forks given the computers intelligence)
-    if(currentMoves[i].equals("CCH") & squareValues[1] == 'H'){
+    if(currentMoves[i].equals("CCH") & squareValues[1] == 'H' & movesCompleted < 6){ //makes sure forks aren't suggested late in game
       return 3;
     }
-    if(currentMoves[i].equals("CCH") & squareValues[3] == 'H'){
+    if(currentMoves[i].equals("CCH") & squareValues[3] == 'H' & movesCompleted < 6){
       return 1;
     }
-    if(currentMoves[i].equals("HCC") & squareValues[5] == 'H'){
+    if(currentMoves[i].equals("HCC") & squareValues[5] == 'H' & movesCompleted < 6){
       return 7;
     }
-    if(currentMoves[i].equals("HCC") & squareValues[7] == 'H'){
+    if(currentMoves[i].equals("HCC") & squareValues[7] == 'H' & movesCompleted < 6){
       return 5;
     }
   }
@@ -217,7 +209,6 @@ private int checkForFork(){
 
 //checks for blocking a future fork
 private int checkForForkBlock(){
-  println("here");
   for(int i = 6; i < 8; i++){ //6+7 are the diagonals 
     if(currentMoves[i].equals("HCH")){
       return 1;
