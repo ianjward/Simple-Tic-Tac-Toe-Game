@@ -16,6 +16,7 @@ private int column3;
 private int topLeftDiag;
 private int botLeftDiag;
 Square[] allSquares = new Square[9]; //current state of squares on the board
+ArrayList<Integer> moveOrder = new ArrayList();
 
 //wipes the board clean
 protected void newBoard(){
@@ -24,6 +25,7 @@ protected void newBoard(){
   aiWon = false;
   endedInDraw = false;
   movesCompleted = 0;
+  moveOrder = new ArrayList();
  
   double randomDouble = Math.random();   //pick whether user is X or O
   if(randomDouble > .5){
@@ -81,10 +83,20 @@ protected void lockSquares(){
      allSquares[i].setImage(new String[] { allSquares[i].getCurrentImage(), allSquares[i].getCurrentImage(), "blank.png" });
    }
 }
+
+//makes all squares that were made unclickable at the end of the game clickable
+protected void unlockSquares(){
+   for(int i = 0; i < 9; i++){
+     if(allSquares[i].getCurrentImage() == "blank.png"){
+        allSquares[i].setImage(new String[] {"blank.png", userIcon + ".png", "blank.png"}); //make sure the user icon is reenabled on hover
+        allSquares[i].setAvailable(true);
+        allSquares[i].setTakenBy(30);
+     }
+   }
+}
  
 //execute an AI turn 
 public void aiPick(){
-    boolean userSelectedMove = false;
     int chosenSquare = suggestAiMove();
-    checkMove(chosenSquare, allSquares[chosenSquare], userSelectedMove);
+    checkMove(chosenSquare, allSquares[chosenSquare], 0);
   }
