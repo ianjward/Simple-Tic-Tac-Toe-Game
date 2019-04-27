@@ -59,6 +59,7 @@ protected int suggestMove(){
 
 //suggests the best move for AI
 protected int suggestAiMove(){
+  println("ere" + movesCompleted);
   int suggestion = -1;//the index of a suggested move
   currentMoves = new String[8]; //reset rows/columns/diagonals
   squareValues = new char[9]; //reset board positions
@@ -76,10 +77,12 @@ protected int suggestAiMove(){
   }
   
   //check for fork
-  if(checkForFork() != -1){
-     return checkForFork(); 
+  if(movesCompleted < 5){
+    if(checkForFork() != -1){
+       return checkForFork(); 
+    }
   }
-  
+ 
   //check for fork block
   if(movesCompleted == 3){
     if(checkForForkBlock() != -1){
@@ -209,6 +212,9 @@ private int checkForFork(){
 
 //checks for blocking a future fork
 private int checkForForkBlock(){
+  if(currentMoves[2].equals("AHA") & currentMoves[5].equals("AHA")){
+    return 8;
+  }
   for(int i = 6; i < 8; i++){ //6+7 are the diagonals 
     if(currentMoves[i].equals("HCH")){
       return 1;
