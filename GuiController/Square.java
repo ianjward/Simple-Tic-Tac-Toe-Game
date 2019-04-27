@@ -14,12 +14,6 @@ public class Square extends GImageButton {
       currentImage = fnames[0];
   }
     
-  protected void setTakenBy(boolean takenByUser){
-    if(takenByUser)
-      takenBy = 1;
-    else
-      takenBy = 0;
-  }
   //sets the image of a square 
   //fnames is an array of file locations, index 0 holds file location for 
   //the picture the button displays on click
