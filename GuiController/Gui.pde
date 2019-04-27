@@ -111,45 +111,45 @@ public void resetButton_click1(GButton source, GEvent event) {
  
 public void imgButton1_click1(Square source, GEvent event) { 
   boolean userSelectedMove = true;
-  checkMove(0,imgButton1, userSelectedMove );
+  checkMove(0,imgButton1, 1);
 } 
 
 public void imgButton2_click1(Square source, GEvent event) { 
    boolean userSelectedMove = true;
-   checkMove(1,imgButton2, userSelectedMove );
+   checkMove(1,imgButton2, 1 );
 } 
 
 public void imgButton3_click1(Square source, GEvent event) { 
    boolean userSelectedMove = true;
-   checkMove(2,imgButton3, userSelectedMove );
+   checkMove(2,imgButton3, 1 );
 }
 
 public void imgButton4_click1(Square source, GEvent event) { 
    boolean userSelectedMove = true;
-   checkMove(3,imgButton4, userSelectedMove );
+   checkMove(3,imgButton4, 1 );
 } 
 
 public void imgButton5_click1(Square source, GEvent event) { 
    boolean userSelectedMove = true;
-   checkMove(4,imgButton5, userSelectedMove );
+   checkMove(4,imgButton5, 1 );
 } 
 
 public void imgButton6_click1(Square source, GEvent event) { 
    boolean userSelectedMove = true;
-   checkMove(5,imgButton6, userSelectedMove );
+   checkMove(5,imgButton6, 1 );
 }
 
 public void imgButton7_click1(Square source, GEvent event) { 
   boolean userSelectedMove = true;
-  checkMove(6,imgButton7, userSelectedMove );
+  checkMove(6,imgButton7, 1 );
 } 
 
 public void imgButton8_click1(Square source, GEvent event) { 
   boolean userSelectedMove = true;
-  checkMove(7,imgButton8, userSelectedMove );
+  checkMove(7,imgButton8, 1 );
 } 
 
 public void imgButton9_click1(Square source, GEvent event) { 
   boolean userSelectedMove = true;
-  checkMove(8,imgButton9, userSelectedMove );
+  checkMove(8,imgButton9, 1 );
 } 
