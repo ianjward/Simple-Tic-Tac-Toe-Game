@@ -59,7 +59,6 @@ protected int suggestMove(){
 
 //suggests the best move for AI
 protected int suggestAiMove(){
-  println("ere" + movesCompleted);
   int suggestion = -1;//the index of a suggested move
   currentMoves = new String[8]; //reset rows/columns/diagonals
   squareValues = new char[9]; //reset board positions
