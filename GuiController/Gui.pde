@@ -3,6 +3,7 @@
 **/
 GPanel Menu; //A container for the reset button
 GButton resetButton; 
+GButton redundantCloseButton;
 Square imgButton1; //one imageButton for each clickable square
 Square imgButton2; 
 Square imgButton3; 
@@ -28,11 +29,18 @@ protected void createGUI(){
   Menu.addEventHandler(this, "Menuclick");
   
   //create reset button
-  resetButton = new GButton(this, 301, 0, 80, 16);
+  resetButton = new GButton(this, 280, 0, 60, 16);
   resetButton.setText("Restart");
   resetButton.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   resetButton.addEventHandler(this, "resetButton_click1");
   Menu.addControl(resetButton);
+  
+  //create redundant close button
+  redundantCloseButton = new GButton(this, 345, 0, 40, 16);
+  redundantCloseButton.setText("Quit");
+  redundantCloseButton.setLocalColorScheme(GCScheme.RED_SCHEME);
+  redundantCloseButton.addEventHandler(this, "closeClicked");
+  Menu.addControl(redundantCloseButton);
   
   // create row1
   imgButton1 = new Square(this, 0, 16, 120, 90, new String[] { "blank.png", "blank.png", "blank.png" } );
@@ -108,6 +116,10 @@ public void Menuclick(GPanel source, GEvent event) {
 public void resetButton_click1(GButton source, GEvent event) { 
   newGame();
 } 
+
+public void closeClicked(GButton source, GEvent event){
+   exit();
+}
  
 public void imgButton1_click1(Square source, GEvent event) { 
   boolean userSelectedMove = true;
