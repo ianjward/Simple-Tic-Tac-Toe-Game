@@ -1,102 +1,166 @@
 /**
-  The BoardData tracks the state of the game currently in progress.
+  The GuiController is responsible for initializing the GUI and handling all events the GUI generates.
 **/
-protected boolean gameOver = false, userWon = false, aiWon = false, endedInDraw = false;
-protected int movesCompleted = 0;
-protected char userIcon; //an X or O
-protected char aiIcon;
-//the sum of all the markers in row/coumn/diagonal
-//a human square counts as 1, AI = 0, available = 30
-private int row1; 
-private int row2;
-private int row3;
-private int column1;
-private int column2;
-private int column3;
-private int topLeftDiag;
-private int botLeftDiag;
-Square[] allSquares = new Square[9]; //current state of squares on the board
-ArrayList<Integer> moveOrder = new ArrayList();
 
-//wipes the board clean
-protected void newBoard(){
-  gameOver = false;
-  userWon = false;
-  aiWon = false;
-  endedInDraw = false;
-  movesCompleted = 0;
-  moveOrder = new ArrayList();
- 
-  double randomDouble = Math.random();   //pick whether user is X or O
-  if(randomDouble > .5){
-      userIcon = 'x';
-      aiIcon = 'o';
+import g4p_controls.*; //A procesing graphics library used for creating buttons
+import peasy.*;// A g44p dependency
+private String userMessage = ""; //any screen dialog to be shown to the user
+private String oPicture = "o.png"; //The relative png location for an O
+private String xPicture = "x.png"; //The relative png location for an X
+private boolean moveMade = true; //Used to track the turn so the draw method does not spam suggest moves
+private int suggestedSquare; //The grid location of a suggested move 0-8. 0 is top left, left to right top to bottom
+private boolean aValidSquareWasPicked = false; //indicates if the last attempted selection by the AI or human was an available move 
+
+public void setup(){
+  size(384, 312, JAVA2D); //size is specifically scaled to png image sizes
+  createGUI();
+  initializeSuggestions(); //
+  newGame();
+}
+
+public void draw(){  
+  Menu.setText(userMessage); //display any messages to player
+  if(!gameOver & moveMade & aValidSquareWasPicked){   //suggest a move
+    moveMade = false;
+    suggestedSquare = suggestMove();
+    allSquares[suggestedSquare].setImage(new String[] {"gray" + userIcon + ".png", userIcon + ".png", "blank.png"});
   }
-  else{
-     userIcon = 'o';
-     aiIcon = 'x';
+   if(movesCompleted == 0 & userIcon == 'x'){   //suggest a move if X
+    moveMade = false;
+    suggestedSquare = suggestMove();
+    allSquares[suggestedSquare].setImage(new String[] {"gray" + userIcon + ".png", userIcon + ".png", "blank.png"});
   }
-  
-  for(int i = 0; i < 9; i++){  //reset all squares
-     allSquares[i].setAvailable(true);
-     allSquares[i].setTakenBy(30); 
-     allSquares[i].setImage(new String[] { "blank.png", userIcon + ".png", "blank.png" });
-  }
-  
-  if(userIcon == 'o'){ //make sure X always starts
-     aiPick(); 
+  if(movesCompleted == 1 & userIcon == 'o'){   //suggest a first move if O
+    moveMade = false;
+    suggestedSquare = suggestMove();
+    allSquares[suggestedSquare].setImage(new String[] {"gray" + userIcon + ".png", userIcon + ".png", "blank.png"});
   }
 }
 
-//checks if game is over
-protected void checkForVictory(){
-  //sum the rows columns and diagonals
-  row1 = allSquares[0].getTakenBy() + allSquares[1].getTakenBy() + allSquares[2].getTakenBy();
-  row2 = allSquares[3].getTakenBy() + allSquares[4].getTakenBy() + allSquares[5].getTakenBy(); 
-  row3 = allSquares[6].getTakenBy() + allSquares[7].getTakenBy() + allSquares[8].getTakenBy();
-  
-  column1 = allSquares[0].getTakenBy() + allSquares[3].getTakenBy() + allSquares[6].getTakenBy();
-  column2 = allSquares[1].getTakenBy() + allSquares[4].getTakenBy() + allSquares[7].getTakenBy();
-  column3 = allSquares[2].getTakenBy() + allSquares[5].getTakenBy() + allSquares[8].getTakenBy();
-  
-  topLeftDiag = allSquares[0].getTakenBy() + allSquares[4].getTakenBy() + allSquares[8].getTakenBy();
-  botLeftDiag = allSquares[6].getTakenBy() + allSquares[4].getTakenBy() + allSquares[2].getTakenBy();
-  
-  //check for AI victory
-  if( row1 == 0| row2 == 0| row3 == 0| topLeftDiag == 0| botLeftDiag == 0 | column1 == 0 | column2 == 0 |column3 == 0 ){
-    gameOver = true;
-    lockSquares();
-    aiWon = true;
- }
-  //Check for human victory
-  if( row1 == 3| row2 == 3| row3 == 3| topLeftDiag == 3| botLeftDiag == 3 | column1 == 3 | column2 == 3 | column3 == 3 ){
-    gameOver = true;
-    lockSquares();
-    userWon = true;
+//monitors system for crtl+z and to un do a move
+void keyPressed() {
+     if (key == 0x1A) { //cntrl + z combo
+       if(movesCompleted == 1 & userIcon == 'x'){
+           resetSquare(moveOrder.remove(moveOrder.size() -1));
+           allSquares[suggestedSquare].setImage(new String[] {"blank.png", userIcon + ".png", "blank.png"});  //erase suggestion
+           userMessage = "";
+           moveMade = true;
+           Menu.setLocalColorScheme(GCScheme.BLUE_SCHEME);
+           return;
+       }
+       if(userIcon == 'x' & movesCompleted == 9){
+           resetSquare(moveOrder.remove(moveOrder.size() -1));
+           allSquares[suggestedSquare].setImage(new String[] {"blank.png", userIcon + ".png", "blank.png"});  //erase suggestion
+           userMessage = "";
+           moveMade = true;
+           gameOver = false; userWon = false; aiWon = false; endedInDraw = false; //unend game if undoing last move
+           Menu.setLocalColorScheme(GCScheme.BLUE_SCHEME);
+           allSquares[suggestedSquare].setImage(new String[] {"blank.png", userIcon + ".png", "blank.png"});  //erase suggestion
+           unlockSquares();
+           return;
+       }
+       if(movesCompleted < 2 ){//ensure user cant undo a move before they have made one
+          Menu.setLocalColorScheme(GCScheme.RED_SCHEME);
+          userMessage = "You haven't made a move yet!";
+          return;
+       }
+      
+     gameOver = false; userWon = false; aiWon = false; endedInDraw = false; //unend game if undoing last move
+     resetSquare(moveOrder.remove(moveOrder.size() -1)); //set last square to be empty
+     resetSquare(moveOrder.remove(moveOrder.size() -1));
+
+     allSquares[suggestedSquare].setImage(new String[] {"blank.png", userIcon + ".png", "blank.png"});  //erase suggestion
+     unlockSquares();
+     moveMade = true;
+     userMessage = "";
+     Menu.setLocalColorScheme(GCScheme.BLUE_SCHEME);
   }
 }
+//if user goes first and finishes game allows to back up until goes first 2x
 
-//makes all squares unclickable
-protected void lockSquares(){
-   for(int i = 0; i < 9; i++){
-     allSquares[i].setAvailable(false);
-     allSquares[i].setImage(new String[] { allSquares[i].getCurrentImage(), allSquares[i].getCurrentImage(), "blank.png" });
+//resets menu color to blue when ctrl+z is released
+void keyReleased(){
+   if (key == 0x1A) { //cntrl + z combo
+       userMessage = "";
+       Menu.setLocalColorScheme(GCScheme.BLUE_SCHEME);
+   }
+   if (key == 'z') { //cntrl + z combo
+       userMessage = "";
+       Menu.setLocalColorScheme(GCScheme.BLUE_SCHEME);
    }
 }
 
-//makes all squares that were made unclickable at the end of the game clickable
-protected void unlockSquares(){
-   for(int i = 0; i < 9; i++){
-     if(allSquares[i].getCurrentImage() == "blank.png"){
-        allSquares[i].setImage(new String[] {"blank.png", userIcon + ".png", "blank.png"}); //make sure the user icon is reenabled on hover
-        allSquares[i].setAvailable(true);
-        allSquares[i].setTakenBy(30);
-     }
+//resets a board index with a blank picture and resets its state to be available
+private void resetSquare(int square){
+    movesCompleted--;
+    allSquares[square].setImage(new String[] {"blank.png", userIcon+".png", "blank.png"});
+    allSquares[square].setAvailable(true);
+    allSquares[square].setTakenBy(30);
+}
+
+//wipes the board and starts a fresh game
+protected void newGame(){
+  newBoard();
+  userMessage = "";
+  Menu.setText(userMessage);
+  Menu.setLocalColorScheme(GCScheme.BLUE_SCHEME); //set menu color
+  moveMade = true;
+  aValidSquareWasPicked = false;
+}
+
+//be O and and pick bottom left
+
+//checks if a desired move is not already taken, displays the appropriate icon if move is legal
+//checks for end game states with helper method checkForVictory()
+//userSelected move 0=AI is calling this method, 1=human is calling
+protected void checkMove(int index, Square square, int userSelectedMove){
+  aValidSquareWasPicked = false;
+  if(square.getAvailability()){
+    square.setImage(selectIconToDisplay(userSelectedMove));
+    square.setAvailable(false);
+    square.setTakenBy(userSelectedMove);
+    movesCompleted++;
+    checkForVictory();
+    aValidSquareWasPicked = true;
+    moveMade = true; //so draw doesnt suggest multiple squares 
+    moveOrder.add(index);
+    if(suggestedSquare != index & userSelectedMove == 1 & movesCompleted != 9){ //erase suggestion if it wasn't choosen
+      allSquares[suggestedSquare].setImage(new String[] {"blank.png", userIcon + ".png", "blank.png"});
+    }
+  }
+
+  //check for end game states or have AI make a move
+  if(movesCompleted == 9 & !gameOver){
+      gameOver = true;
+      endedInDraw = true;
+      Menu.setLocalColorScheme(GCScheme.GOLD_SCHEME);
+      userMessage = "The game was a draw, click restart!";
+      lockSquares();
+   }
+  else if(userWon){
+      Menu.setLocalColorScheme(GCScheme.GREEN_SCHEME);
+      userMessage = "You won in " + movesCompleted + " moves, click restart!"; 
+      lockSquares();
+   }
+  else if(aiWon){
+      Menu.setLocalColorScheme(GCScheme.RED_SCHEME);
+      userMessage = "Way to go!!!! You lost in " + movesCompleted + " moves"; 
+      lockSquares();
+  }
+  else if(userSelectedMove == 1 && aValidSquareWasPicked){
+      aiPick();
    }
 }
- 
-//execute an AI turn 
-public void aiPick(){
-    int chosenSquare = suggestAiMove();
-    checkMove(chosenSquare, allSquares[chosenSquare], 0);
+
+//selects the correct icon to display on the screen based on whose turn it is (userSelectedMove indicates user turn)
+private String[] selectIconToDisplay(int userSelectedMove){
+  if(userIcon == 'x' & userSelectedMove == 0){
+     return new String[] {"o.png","o.png","o.png"};
+  }else if(userIcon == 'x' & userSelectedMove == 1){
+     return new String[] {"x.png","x.png","x.png"};
+  }else if(userIcon == 'o' & userSelectedMove == 0){
+    return new String[] {"x.png","x.png","x.png"};
+  }else{
+    return new String[] {"o.png","o.png","o.png"};
   }
+}
