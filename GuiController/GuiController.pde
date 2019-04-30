@@ -115,7 +115,6 @@ protected void newGame(){
 //userSelected move 0=AI is calling this method, 1=human is calling
 protected void checkMove(int index, Square square, int userSelectedMove){
   aValidSquareWasPicked = false;
-  println("here" + movesCompleted);
   if(square.getAvailability()){
     square.setImage(selectIconToDisplay(userSelectedMove));
     square.setAvailable(false);
@@ -125,7 +124,6 @@ protected void checkMove(int index, Square square, int userSelectedMove){
     aValidSquareWasPicked = true;
     moveMade = true; //so draw doesnt suggest multiple squares 
     moveOrder.add(index);
-        println("asdf");
     if(suggestedSquare != index & userSelectedMove == 1 & movesCompleted != 9){ //erase suggestion if it wasn't choosen
       allSquares[suggestedSquare].setImage(new String[] {"blank.png", userIcon + ".png", "blank.png"});
     }
@@ -136,12 +134,12 @@ protected void checkMove(int index, Square square, int userSelectedMove){
       gameOver = true;
       endedInDraw = true;
       Menu.setLocalColorScheme(GCScheme.GOLD_SCHEME);
-      userMessage = "The game was a draw, click restart to play again!";
+      userMessage = "The game was a draw, click restart!";
       lockSquares();
    }
   else if(userWon){
       Menu.setLocalColorScheme(GCScheme.GREEN_SCHEME);
-      userMessage = "You won in " + movesCompleted + " moves, click restart to play again!"; 
+      userMessage = "You won in " + movesCompleted + " moves, click restart!"; 
       lockSquares();
    }
   else if(aiWon){
